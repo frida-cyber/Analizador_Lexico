@@ -39,3 +39,11 @@ l = Lexer(): Crea una instancia de la clase Lexer.
 while True:: Inicia un ciclo infinito.
 
 text = input("$ "): Pide al usuario que ingrese una línea de código.
+
+@_(r"'[^']*'",r'"[^"]"') define un token llamado STRING, el cual representa una cadena de texto entre comillas simples o dobles.
+
+La función STRING(self,t) simplemente devuelve el token t.
+
+La función error(self,t) es llamada cuando se encuentra un caracter no válido o ilegal, y se encarga de imprimir un mensaje de error indicando el caracter no válido y luego avanzar al siguiente caracter.
+
+La función main() es el punto de entrada del programa. Primero crea una instancia de la clase Lexer. Luego, entra en un bucle infinito que lee la entrada del usuario desde la consola utilizando input("$ "). Después, se ejecuta el método tokenize de la instancia de Lexer para analizar el texto ingresado y se imprimen los tokens resultantes. Si se produce un error de final de archivo (EOFError), se sale del bucle y el programa termina.
