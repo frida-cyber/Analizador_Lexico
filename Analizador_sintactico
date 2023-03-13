@@ -1,1 +1,8 @@
+import sly
+import analizador_lexico as Lexer 
+import token
+import os
+import codecs
+import re
+from sys import stdin
 
