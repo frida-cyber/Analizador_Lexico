@@ -1,8 +1,63 @@
-import sly
-import analizador_lexico as Lexer 
-import token
-import os
-import codecs
-import re
-from sys import stdin
+from sly import Lexer, Parser
 
+class Lexer(Lexer):
+    tokens = {
+        INTEGER,
+        FLOAT,
+        PLUS,
+        MINUS,
+        TIMES,
+        DIVIDED,
+        POWER,
+        LPAREN,
+        RPAREN,
+    }
+
+    INTEGER = r'\d+'
+    FLOAT = r'\d+\.\d+'
+
+    PLUS = r'\+'
+    MINUS = r'\-'
+    TIMES = r'\*'
+    DIVIDED = r'\/'
+    POWER = r'\^'
+
+    LPAREN = r'\('
+    RPAREN = r'\)'
+
+class Parser(Parser):
+    tokens = Lexer.tokens
+
+    precedence = (
+        ('left', PLUS, MINUS),
+        ('left', TIMES, DIVIDED),
+        ('right', POWER),
+    )
+
+    @_('expression PLUS expression',
+       'expression MINUS expression',
+       'expression TIMES expression',
+       'expression DIVIDED expression',
+       'expression POWER expression')
+    def expression(self, p):
+        return (p[1], p[0], p[2])
+
+    @_('INTEGER')
+    def expression(self, p):
+        return ('number', p.INTEGER)
+
+    @_('FLOAT')
+    def expression(self, p):
+        return ('number', p.FLOAT)
+
+    @_('LPAREN expression RPAREN')
+    def expression(self, p):
+        return p.expression
+
+parser = Parser()
+
+data = '2 * (3 + 4)'
+
+result = parser.parse(Lexer().tokenize(data))
+
+print(result)
