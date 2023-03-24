@@ -1,49 +1,29 @@
-# Analizador_Lexico
-Analizador lexico Compiladores
-import sly: Importa el módulo sly que contiene la clase Lexer que se utilizará más adelante en el código.
+El código proporciona una implementación completa de un analizador léxico y sintáctico para expresiones aritméticas simples. Aquí está la documentación de las principales partes del código:
 
-class Lexer(sly.Lexer):: Define una clase llamada Lexer que hereda de la clase sly.Lexer.
 
-tokens = {...}: Define un diccionario de tokens que contiene todas las palabras reservadas, operadores, identificadores y constantes del lenguaje que se va a analizar.
+Nodo Clase
 
-literals = '+-*/^{(){}=.;,:': Define una cadena de caracteres que serán considerados literales en el código, es decir, caracteres que no serán tratados como tokens.
+Esta clase se utiliza para representar los nodos del árbol de sintaxis abstracta. Cada nodo tiene un tipo y puede tener hijos y/o una hoja.
 
-FLOAT = r'\d+\.?\d*': Define una expresión regular para reconocer números en punto flotante en el código fuente.
 
-INTEGER = r'\d+': Define una expresión regular para reconocer números enteros en el código fuente.
+Clase Lexer
 
-PLUS= r'\+', MINUS = r'\-', TIMES =r'\*', DIVIDED = r'\/', POWER = r'\^': Define expresiones regulares para reconocer los operadores matemáticos básicos en el código fuente.
+Esta clase implementa el analizador léxico utilizando la librería PLY. Contiene una lista de tokens y las expresiones regulares que los definen, así como las funciones para manejar los tokens.
 
-ignore = ' \t\r': Define una cadena de caracteres que serán ignorados por el lexer.
 
-ignore_newline = '\n+': Define una expresión regular para ignorar saltos de línea.
+Clase Parser
 
-ID = r"[a-zA-Z_][a-zA-Z_\-0-9]*": Define una expresión regular para reconocer identificadores en el código fuente.
+Esta clase implementa el analizador sintáctico utilizando la librería PLY. Contiene las reglas de la gramática y las funciones para manejar los nodos del árbol de sintaxis abstracta. También se utiliza para recorrer el árbol utilizando el patrón Visitor.
 
-ID["if"] = IF, ID["for"] = FOR, ID["while"] = WHILE, y así sucesivamente: Asigna a cada palabra reservada del lenguaje su correspondiente token.
 
-LE = r"<=", LT = r"<", EQ = r"==", GE = r">=", GT = r">", NE = r"!=": Define expresiones regulares para reconocer operadores de comparación en el código fuente.
+Clase PrintVisitor
 
-def INTEGER(self,t):: Define un método de la clase Lexer para convertir el valor de los tokens INTEGER de tipo string a tipo entero.
+Esta clase se utiliza para imprimir el árbol de sintaxis abstracta utilizando el patrón Visitor.
 
-def ignore_newline(self,t):: Define un método de la clase Lexer para contar el número de saltos de línea que se encuentran en el código fuente.
 
-@_(r'\d+(\.\d+)?'): Define un decorador para el método NUMBER de la clase Lexer. Este decorador indica que el método reconocerá números en punto flotante y los convertirá a int o float dependiendo de su valor.
+Función principal()
 
-@_(r"'[^']*'",r'"[^"]"'): Define un decorador para el método STRING de la clase Lexer. Este decorador indica que el método reconocerá cadenas de caracteres delimitadas por comillas simples o dobles.
+La función principal del programa. Crea una instancia del analizador léxico y sintáctico, y utiliza un bucle para leer las expresiones aritméticas ingresadas por el usuario. Luego, se ejecuta el analizador léxico y sintáctico y se imprime el árbol de sintaxis abstracto resultante. El bucle se detiene cuando se produce un error de EOF o cuando se interrumpe voluntariamente la ejecución del programa.
 
-def error(self,t):: Define un método de la clase Lexer para manejar errores en el código fuente.
 
-l = Lexer(): Crea una instancia de la clase Lexer.
-
-while True:: Inicia un ciclo infinito.
-
-text = input("$ "): Pide al usuario que ingrese una línea de código.
-
-@_(r"'[^']*'",r'"[^"]"') define un token llamado STRING, el cual representa una cadena de texto entre comillas simples o dobles.
-
-La función STRING(self,t) simplemente devuelve el token t.
-
-La función error(self,t) es llamada cuando se encuentra un caracter no válido o ilegal, y se encarga de imprimir un mensaje de error indicando el caracter no válido y luego avanzar al siguiente caracter.
-
-La función main() es el punto de entrada del programa. Primero crea una instancia de la clase Lexer. Luego, entra en un bucle infinito que lee la entrada del usuario desde la consola utilizando input("$ "). Después, se ejecuta el método tokenize de la instancia de Lexer para analizar el texto ingresado y se imprimen los tokens resultantes. Si se produce un error de final de archivo (EOFError), se sale del bucle y el programa termina.
+En resumen, este código implementa un ejemplo completo de cómo utilizar la librería PLY para construir un analizador léxico y sintáctico para expresiones aritméticas simples, y cómo imprimir el árbol de sintaxis abstracta utilizando el patrón Visitor.
