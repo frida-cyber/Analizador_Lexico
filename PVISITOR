@@ -1,0 +1,86 @@
+import analizador_lexico
+class Visitor:
+    def visit_expression(self, node):
+        pass
+
+    def visit_declaration(self, node):
+        pass
+
+    def visit_block(self, node):
+        pass
+class Expression:
+    def accept(self, visitor):
+        visitor.visit_expression(self)
+
+
+class Declaration:
+    def accept(self, visitor):
+        visitor.visit_declaration(self)
+
+
+class Block:
+    def accept(self, visitor):
+        visitor.visit_block(self)
+def parse_expression(tokens):
+    if tokens[0] == 'IDENTIFIER':
+        if len(tokens) == 1:
+            return Expression()
+        elif tokens[1] in ['OPERATOR', 'SEPARATOR']:
+            return parse_expression(tokens[2:])
+    elif tokens[0] == 'CONSTANT':
+        if len(tokens) == 1:
+            return Expression()
+        elif tokens[1] in ['OPERATOR', 'SEPARATOR']:
+            return parse_expression(tokens[2:])
+    elif tokens[0] in ['OPERATOR', 'SEPARATOR']:
+        return None
+    else:
+        return None
+
+
+def parse_declaration(tokens):
+    if tokens[0] in ['KEYWORD', 'IDENTIFIER']:
+        if tokens[1] == 'IDENTIFIER':
+            if len(tokens) == 2:
+                return Declaration()
+            elif tokens[2] == 'OPERATOR':
+                expression = parse_expression(tokens[3:])
+                if expression:
+                    return Declaration(expression)
+        else:
+            return None
+    else:
+        return None
+
+
+def parse_block(tokens):
+    if tokens[0] == 'SEPARATOR' and tokens[1] == 'KEYWORD' and tokens[2] == 'SEPARATOR':
+        i = 3
+        block = Block()
+        while i < len(tokens):
+            if tokens[i] == 'KEYWORD' and tokens[i+1] == 'SEPARATOR':
+                if tokens[i+2:i+4] == ['IDENTIFIER', 'OPERATOR']:
+                    expression = parse_expression(tokens[i+4:])
+                    if not expression:
+                        return None
+                    block.add_statement(Declaration(expression))
+                elif tokens[i+2:i+4] == ['IDENTIFIER', 'SEPARATOR']:
+                    declaration = parse_declaration(tokens[i+3:])
+                    if not declaration:
+                        return None
+                    block.add_statement(declaration)
+                else:
+                    return None
+                i += 4
+            elif tokens[i] == 'SEPARATOR' and tokens[i+1] == 'KEYWORD' and tokens[i+2] == 'SEPARATOR':
+                i += 3
+            else:
+                return None
+        return block
+    else:
+        return None
+
+visitor = Visitor()
+root_node = parse_block(tokens=0)
+if root_node:
+    root_node.accept
