@@ -1,0 +1,13 @@
+Este código define una serie de clases que representan los diferentes tipos de nodos que pueden formar parte de un árbol de sintaxis abstracta para expresiones matemáticas y de texto. En particular, la clase Expr es una clase base que es subclase de otras clases que representan los diferentes tipos de nodos.
+
+La clase Entero representa un número entero y tiene un atributo valor que almacena su valor. La clase Cadena representa una cadena de texto y tiene un atributo valor que almacena su contenido. La clase Variable representa una variable y tiene un atributo nombre que almacena su nombre.
+
+Las clases Suma, Resta, Multiplicacion y Division representan operaciones matemáticas y tienen dos atributos izquierda y derecha, que representan los operandos izquierdo y derecho, respectivamente.
+
+La clase AnalizadorSemantico es una clase que se encarga de realizar el análisis semántico del árbol de sintaxis abstracta. Tiene un atributo variables que es un diccionario que almacena las variables y sus valores. El método analizar toma el árbol de sintaxis abstracta como argumento y llama al método evaluar para evaluar el valor de la expresión.
+
+El método evaluar es recursivo y toma un objeto de tipo Expr como argumento. Si el objeto es una instancia de la clase Entero o Cadena, simplemente devuelve su valor. Si el objeto es una instancia de la clase Variable, verifica que la variable haya sido declarada previamente y devuelve su valor. Si el objeto es una instancia de alguna de las clases que representan operaciones matemáticas, evalúa los operandos izquierdo y derecho recursivamente y realiza la operación correspondiente.
+
+En caso de que el objeto no sea una instancia de ninguna de las clases válidas, se lanza una excepción de tipo TypeError. Si la variable no ha sido declarada previamente, se lanza una excepción de tipo NameError. Si se intenta dividir por cero, se lanza una excepción de tipo ZeroDivisionError.
+
+Por último, el código muestra un ejemplo de uso del analizador semántico. Se crea un objeto de la clase AnalizadorSintactico y se obtienen los tokens del analizador léxico. Luego se construye el árbol de sintaxis abstracta llamando al método analizar del analizador sintáctico. Finalmente, se crea un objeto de la clase AnalizadorSemantico y se llama al método analizar pasando como argumento el árbol de sintaxis abstracta para evaluar la expresión.
