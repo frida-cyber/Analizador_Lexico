@@ -1,0 +1,74 @@
+# Clase para representar nodos del árbol de sintaxis abstracta
+class Expr:
+    pass
+
+class Entero(Expr):
+    def __init__(self, valor: int):
+        self.valor = valor
+
+class Cadena(Expr):
+    def __init__(self, valor: str):
+        self.valor = valor
+
+class Variable(Expr):
+    def __init__(self, nombre: str):
+        self.nombre = nombre
+
+class Suma(Expr):
+    def __init__(self, izquierda: Expr, derecha: Expr):
+        self.izquierda = izquierda
+        self.derecha = derecha
+
+class Resta(Expr):
+    def __init__(self, izquierda: Expr, derecha: Expr):
+        self.izquierda = izquierda
+        self.derecha = derecha
+
+class Multiplicacion(Expr):
+    def __init__(self, izquierda: Expr, derecha: Expr):
+        self.izquierda = izquierda
+        self.derecha = derecha
+
+class Division(Expr):
+    def __init__(self, izquierda: Expr, derecha: Expr):
+        self.izquierda = izquierda
+        self.derecha = derecha
+
+# Clase para el analizador semántico
+class AnalizadorSemantico:
+    def __init__(self):
+        self.variables = {}
+
+    def analizar(self, arbol_sintaxis_abstracta: Expr) -> None:
+        self.evaluar(arbol_sintaxis_abstracta)
+
+    def evaluar(self, expr: Expr) -> Union[int, str]:
+        if isinstance(expr, Entero):
+            return expr.valor
+        elif isinstance(expr, Cadena):
+            return expr.valor
+        elif isinstance(expr, Variable):
+            if expr.nombre not in self.variables:
+                raise NameError(f"Error semántico: la variable '{expr.nombre}' no ha sido declarada")
+            return self.variables[expr.nombre]
+        elif isinstance(expr, Suma):
+            return self.evaluar(expr.izquierda) + self.evaluar(expr.derecha)
+        elif isinstance(expr, Resta):
+            return self.evaluar(expr.izquierda) - self.evaluar(expr.derecha)
+        elif isinstance(expr, Multiplicacion):
+            return self.evaluar(expr.izquierda) * self.evaluar(expr.derecha)
+        elif isinstance(expr, Division):
+            divisor = self.evaluar(expr.derecha)
+            if divisor == 0:
+                raise ZeroDivisionError("Error semántico: división por cero")
+            return self.evaluar(expr.izquierda) / divisor
+        else:
+            raise TypeError("Error semántico: tipo de expresión no válido")
+
+# Ejemplo de uso del analizador semántico
+analizador_sintactico = AnalizadorSintactico()
+tokens = [...] # Obtener los tokens del analizador léxico
+arbol_sintaxis_abstracta = analizador_sintactico.analizar(tokens) # Construir el árbol de sintaxis abstracta
+
+analizador_semantico = AnalizadorSemantico()
+analizador_semantico.analizar(arbol_sintaxis_abstracta) # Evaluar el árbol de sintaxis abstracta
